@@ -30,15 +30,19 @@ public class OrderController {
     }
 
     @PostMapping("/{userId}/orders")
-    public ResponseEntity createOrder(@RequestBody RequestOrder requestOrder,
+    public ResponseEntity<ResponseOrder> createOrder(@RequestBody RequestOrder requestOrder,
                                      @PathVariable("userId") String userId){
 
         ModelMapper mp = new ModelMapper();
         mp.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
+
         OrderDto orderDto = mp.map(requestOrder, OrderDto.class);
         orderDto.setUserId(userId);
+        OrderDto createdOrder = orderService.createOrder(orderDto);
 
-        return orderService.createOrder(orderDto);
+        ResponseOrder responseOrder = mp.map(createdOrder, ResponseOrder.class);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseOrder);
     }
 
     @GetMapping("/{userId}/orders")

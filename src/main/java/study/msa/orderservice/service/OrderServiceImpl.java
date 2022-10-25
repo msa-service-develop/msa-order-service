@@ -21,18 +21,19 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
 
     @Override
-    public ResponseEntity<OrderDto> createOrder(OrderDto orderDto) {
-        orderDto.setUserId(UUID.randomUUID().toString());
+    public OrderDto createOrder(OrderDto orderDto) {
+        orderDto.setOrderId(UUID.randomUUID().toString());
         orderDto.setTotalPrice(orderDto.getQty() * orderDto.getUnitPrice());
 
         ModelMapper mp = new ModelMapper();
         mp.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         OrderEntity orderEntity = mp.map(orderDto, OrderEntity.class);
+
         orderRepository.save(orderEntity);
 
         OrderDto returnVal = mp.map(orderEntity, OrderDto.class);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(returnVal);
+        return returnVal;
     }
 
     @Override
