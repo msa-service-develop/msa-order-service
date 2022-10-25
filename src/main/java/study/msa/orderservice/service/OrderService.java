@@ -7,6 +7,6 @@ import study.msa.orderservice.dto.OrderDto;
 
 public interface OrderService {
     ResponseEntity<OrderDto> createOrder(OrderDto orderDetails);
-    OrderDto getOrderByOrderId(OrderDto orderId);
+    OrderDto getOrderByOrderId(String orderId);
     Iterable<OrderEntity> getOrderByUserId(String userId);
 }
